@@ -1,0 +1,122 @@
+<!--index.html-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Drawing App</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=yes">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/start/jquery-ui.css">
+        <link rel="stylesheet" href="styling.css">
+        
+    </head>	
+
+    <body>
+        <!--title-->
+        <div id="header">Drawing App</div>
+        
+        <!--title-->
+        <div class="inputContainer">
+            <!--color-->
+            <div class="input" id="colorInput">
+                <input type="color" list id="paintColor">
+            </div>
+            
+            <!--size-->
+            <div class="input" id="thicknessInput">
+                <div id="circle"></div>
+            </div>
+            <div class="input">
+                <div id="slider"></div>
+            </div>
+        </div>
+        
+        <!--canvas container-->
+        <div id="container">
+            <canvas id="paint" width="500px" height="400px"></canvas>
+        </div>
+        
+        <!--buttons-->
+        <div class="inputContainer2">
+            <!--Erase-->
+            <div class="input2">
+                <span id="erase" class="button">Erase</span>
+            </div>
+            
+            <!--Save-->
+            <div class="input2">
+                <span id="save" class="button">Save</span>
+            </div>
+            
+            <!--Reset-->
+            <div class="input2">
+                <span id="reset" class="button">Reset</span>
+            </div>
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script >
+        
+        //javascript.js
+$(function(){
+    
+       $("#slider").slider();
+    //declare variables
+    
+    //paintingerasing or not    
+    var paint = false;
+    
+    //painting or erasing
+    var paint_erase = "paint";
+    
+    //get the canvas and context
+    var canvas = document.getElementById("paint");
+    var ctx = canvas.getContext("2d");
+    
+    //get the canvas container
+    var container = $("#container");
+        
+    //mouse position
+    var mouse = {x: 0, y: 0};
+    
+    //onload load saved work from localStorage
+   
+    //set drawing parameters (lineWidth, lineJoin, lineCap)
+    ctx.lineWidth = 3;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    
+    //click inside container
+    container.mousedown(function(e){
+        paint = true;
+        ctx.beginPath();
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+        ctx.moveTo(mouse.x, mouse.y);
+    });
+    
+    //move the mouse while holding mouse key
+    container.mousemove(function(e){
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+        if(paint == true){
+            if(paint_erase == "paint"){
+                //get color input   
+                ctx.strokeStyle = "blue";
+            }else{
+                //white color 
+                ctx.strokeStyle = "white";
+            }
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+        }
+    });
+    //mouse up->we are not paintingerasing anymore
+   
+    //change lineWidth using slider
+ 
+
+});</script>
+    </body>
+
+</html>

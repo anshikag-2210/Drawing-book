@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+	<meta charset="utf-8">
+		<meta name="viewport" content="width-device-width , initial-scale=1, user-scalable=yes">
+  <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    
+     <title>drawing app</title>
+    	 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="drawing.css">
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/start/jquery-ui.css">
+      <style>
+    </style>
+    </head>
+    <body>
+        
+ <div id="header">Drawing App</div>
+        <div class="inputContainer">
+        
+            <div class="input" id="colorinput">
+                <input type="color" list id="paintcolor">
+             </div>
+            <div class="input" id="thickness">
+            <div id="circle"></div>
+            </div>
+            <div class="input">
+            <div id="slider"></div></div>
+        </div>
+        
+        
+        
+    <div id="container">
+        <canvas id="paint" width="500px" height="400px"></canvas>
+        </div>
+        
+        
+        <div class="anshika">
+        <div class="input2">
+            <span id="erase" class="button">Erase</span></div>
+        
+          <div class="input2">
+            <span id="save" class="button">Save</span></div>
+              <div class="input2">
+            <span id="reset" class="button">Reset</span></div>
+        </div>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <script>src="jquery.js"</script>
+        
+        <script>
+$(function(){
+  
+
+   /* var canvas=document.getElementById("paint");
+    var context = canvas.getContext('2d');
+    context.beginPath();
+
+
+    context.lineWidth=40;
+    context.strokeStyle='green';
+    context.lineCap="round";
+    context.moveTo(50,50);
+
+    context.lineJoin="round";
+    context.lineTo(200,200);
+    context.lineTo(400,100);
+    context.stroke();
+    */
+
+    var paint=false;
+    var paint_erase= "paint";
+    var canvas=document.getElementById("paint");
+    var ctx=canvas.getContext("2d");
+    var container=$("#container");
+    var mouse={x: 0, y: 0};
+
+
+if(localStorage.getItem("imgCanvas")!=null){
+    var img=new Image();
+    img.onload=function(){
+        ctx.drawImage(img,0,0);
+    }
+    img.src=localStorage.getItem("imgCanvas");
+};
+
+
+    ctx.lineWidth=3;
+    ctx.lineJoin="round";
+    ctx.lineCap="round";
+    container.mousedown(function(e){
+        paint=true;
+        ctx.beginPath();
+        mouse.x=e.pageX -this.offsetLeft;
+          mouse.y=e.pageY-this.offsetTop;
+
+        ctx.moveTo(mouse.x, mouse.y);
+    });
+      container.mousemove(function(e){
+        //paint=true;
+        //ctx.beginPath();
+mouse.x=e.pageX-this.offsetLeft;
+ mouse.y = e.pageY -this.offsetTop;
+//  mouse.y = e.pageY - this.offsetTop;
+if(paint == true){
+    if(paint_erase == "paint"){
+        ctx.strokeStyle=$("#paintcolor").val();
+    }
+    else{
+    ctx.strokeStyle="white";               }
+          ctx.lineTo(mouse.x,mouse.y);
+          ctx.stroke();
+        }
+        //ctx.moveTo(mouse.x,mouse.y);
+    });
+
+
+
+   container.mouseup(function(){
+        paint=false;
+    });
+
+container.mouseleave(function(){
+        paint=false;
+    });
+
+   $("#reset").click(function(){
+       ctx.clearRect(0,0,canvas.width,canvas.height);
+       paint_erase="paint";
+       $("#erase").removeClass("#eraseMode");
+   });
+    $("#save").click(function(){
+         if(typeof(localStorage)!=null){
+             localStorage.setItem("imgCanvas",canvas.toDataURL());
+         //window.alert(local.getItem("imgCanvas"));
+         }
+             else window.alert("does not suppport localstorage");
+         
+    });
+   
+    
+    
+    $("#erase").click(function(){
+if(paint_erase=="paint")
+    paint_erase="erase";
+else
+    paint_erase="paint";
+
+$(this).toggleClass("eraseMode");
+    });
+    
+    
+    
+    $("#paintcolor").change(function(){
+        $("#circle").css("background-color",$(this).val());
+    });
+    
+    
+      $("#slider").slider({
+    min:3,
+    max:30,
+    slide: function(event,ui){
+    $("#circle").height(ui.value);
+    $("#circle").width(ui.value);
+ctx.lineWidth=ui.value;
+    }
+    });
+    
+});
+
+        
+        
+        
+        </script>
+        
+        
+    </body>
+    
+    
+    
